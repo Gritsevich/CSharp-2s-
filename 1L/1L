@@ -1,0 +1,190 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Lab1
+{
+public partial class Form1 : Form
+{
+public Form1()
+{
+InitializeComponent();
+textBox1.Visible = false;
+button3.Visible = false;
+button7.Visible = false;
+label1.Text = "";
+}
+
+public string pathForChanging { get; set; }
+
+private void button2_Click(object sender, EventArgs e)
+{
+label1.Text = " ";
+OpenFileDialog filePick = new OpenFileDialog();
+filePick.Filter = "текстовые файлы (*.txt)|*.txt";
+//filePick.ShowDialog();
+if (filePick.ShowDialog() == DialogResult.OK)
+{
+string filePath = filePick.FileName;
+FileInfo file = new FileInfo(filePath);
+if (file.Exists)
+{
+file.Delete();
+
+}
+else { label1.Text = "ошибка при открытии файла"; }
+
+}
+else { label1.Text = "вы закрыли диалог открытия файла,попробуйте открыть файл ещё раз "; }
+
+}
+
+private void button1_Click(object sender, EventArgs e)
+{
+label1.Text = " ";
+OpenFileDialog filePick = new OpenFileDialog();
+filePick.Filter = "текстовые файлы (*.txt)|*.txt";
+//filePick.ShowDialog();
+if (filePick.ShowDialog() == DialogResult.OK)
+{
+string filePath = filePick.FileName;
+FileInfo file = new FileInfo(filePath);
+if (file.Exists)
+{
+string information = $"Имя файла {file.Name}\n В последний раз к нему обращались {file.LastAccessTimeUtc}\n Его размер {file.Length} байта \n Файл имеет расширение {file.Extension}";
+label1.Text = information;
+
+}
+else { label1.Text = "ошибка при открытии файла"; }
+
+}
+else { label1.Text = "вы закрыли диалог открытия файла,попробуйте открыть файл ещё раз "; }
+
+}
+
+private void button4_Click(object sender, EventArgs e)
+{
+label1.Text = " ";
+OpenFileDialog filePick = new OpenFileDialog();
+filePick.Filter = "текстовые файлы (*.txt)|*.txt";
+//filePick.ShowDialog();
+if (filePick.ShowDialog() == DialogResult.OK)
+{
+string filePath = filePick.FileName;
+FileInfo file = new FileInfo(filePath);
+if (file.Exists)
+{
+using (StreamReader stream = file.OpenText())
+{
+string s = " ";
+while ((s = stream.ReadLine()) != null)
+{
+label1.Text += s + "\n";
+}
+}
+
+}
+else { label1.Text = "ошибка при открытии файла"; }
+
+}
+else { label1.Text = "вы закрыли диалог открытия файла,попробуйте открыть файл ещё раз "; }
+
+}
+
+private void button5_Click(object sender, EventArgs e)
+{
+
+label1.Text = " ";
+OpenFileDialog filePick = new OpenFileDialog();
+filePick.Filter = "текстовые файлы (*.txt)|*.txt";
+//filePick.ShowDialog();
+if (filePick.ShowDialog() == DialogResult.OK)
+{
+string filePath = filePick.FileName;
+FileInfo file = new FileInfo(filePath);
+if (file.Exists)
+{
+textBox1.Visible = true;
+pathForChanging = filePath;
+button5.Visible = false;
+button3.Visible = true;
+}
+else { label1.Text = "ошибка при открытии файла"; }
+
+}
+else { label1.Text = "вы закрыли диалог открытия файла,попробуйте открыть файл ещё раз "; }
+
+}
+
+private void button3_Click(object sender, EventArgs e)
+{
+
+string text = textBox1.Text;
+try
+{
+using (StreamWriter writer = new StreamWriter(pathForChanging, true))
+{
+writer.WriteLine(text);
+}
+}
+catch (Exception)
+{
+label1.Text = "произошла ошибка при открытии файла для записи";
+throw;
+}
+button5.Visible = true;
+textBox1.Visible = false;
+button3.Visible = false;
+}
+
+private void button6_Click(object sender, EventArgs e)
+{
+label1.Text = " ";
+FolderBrowserDialog folder = new FolderBrowserDialog();
+if (folder.ShowDialog() == DialogResult.OK)
+{
+pathForChanging = "";
+pathForChanging += folder.SelectedPath;
+
+textBox1.Visible = true;
+textBox1.Text = "";
+button6.Visible = false;
+button7.Visible = true;
+}
+else { label1.Text = "вы закрыли диалог открытия файла,попробуйте открыть файл ещё раз "; }
+
+}
+
+private void button7_Click(object sender, EventArgs e)
+{
+if (textBox1.Text !=
+ 
+"")
+{
+
+
+FileInfo file = new FileInfo(pathForChanging+textBox1.Text);
+if (file.Exists==false)
+{
+file.Create();
+label1.Text = "процесс завершился успешно";
+}
+else
+{
+label1.Text = "измените название";
+}
+}
+else
+{
+label1.Text = "измените название";
+}
+}
+}
+}
